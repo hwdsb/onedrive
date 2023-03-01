@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>OneDrive</title>
+	<script src="https://js.live.net/v7.2/OneDrive.js"></script>
+	<style type="text/css">
+body {margin:0;padding:0;}
+#drive {
+	background: rgb(0, 124, 186);
+	border: 1px solid rgb(0, 113, 161);
+	border-radius: 3px;
+	box-sizing: border-box;
+	color: #fff;
+	cursor: pointer;
+	display: none;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 13px;
+	font-stretch: 100%;
+	font-weight: 400;
+	height: 36px;
+	line-height: 30px;
+	min-height: 32px;
+	padding: 0 12px;
+}
+#drive:hover {
+	background: rgb(0, 107, 161);
+}
+	</style>
+</head>
+<body>
+<button id="drive" onclick="javascript:launchOneDrivePicker();return(false);"></button>
+
+<script>
+let url = new URL(document.location)
+if ( ! url.searchParams.get( "oauth" ) ) {
+	document.getElementById( "drive" ).style.display = "block"
+	document.getElementById( "drive" ).innerText = url.searchParams.get( "l" )
+
+	let advanced = {
+		createLinkParameters: {
+			type: url.searchParams.get( "t" ),
+			scope: url.searchParams.get( "s" )
+		}
+	}
+
+	if ( url.searchParams.get( "h" ) ) {
+		advanced.loginHint = url.searchParams.get( "h" )
+	}
+
+	let pickerOptions = {
+		success: function(files) {
+			if (window.parent) {
+				files.nonce = url.searchParams.get( "n" )
+				window.parent.postMessage( files, url.searchParams.get( "o" ) )
+			}
+		},
+		cancel: function() {},
+		clientId: url.searchParams.get( "c" ),
+		action: "share",
+		advanced: advanced
+	}
+
+	function launchOneDrivePicker() {
+		OneDrive.open( pickerOptions )
+	}
+}
+</script>
+</body>
+</html>

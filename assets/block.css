@@ -1,0 +1,36 @@
+/* adds some padding to the block so you can select it */
+div[data-type="hwdsb/onedrive"] {
+	padding: 5px;
+}
+
+.wp-block-hwdsb-onedrive .components-placeholder__learn-more,
+.wp-block-hwdsb-onedrive .spacer {
+	margin-top: 1em;
+}
+
+.wp-block-hwdsb-onedrive .mini-spacer {
+	margin-top: .5em;
+}
+
+div[data-type="hwdsb/onedrive"] p {
+	margin-bottom: 0;
+}
+
+/* WP 5.4 styles */
+.block-editor-editor-skeleton__html-container .wp-block-hwdsb-onedrive input[type="url"] {
+	width: 100%;
+}
+
+.block-editor-editor-skeleton__html-container .onedrive-sidebar-dimensions {
+	margin-bottom: 0;
+}
+
+.block-editor-editor-skeleton__html-container .onedrive-sidebar-dimensions-label {
+	font-weight: bold;
+}
+
+.block-editor-editor-skeleton__html-container .edit-post-sidebar .onedrive-sidebar-item:last-child {
+	border-top: 0;
+	margin-top: -40px;
+	margin-bottom: -5px;
+}

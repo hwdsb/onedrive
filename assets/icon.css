@@ -1,0 +1,21 @@
+.onedrive-block-icon {
+	background: #fff;
+	border: 1px solid #ccc;
+	border-radius: 6px;;
+	padding: .5rem;
+}
+
+.onedrive-block-icon img {
+	margin-right: .5rem;
+}
+
+.onedrive-block-icon img,
+.onedrive-block-icon-description {
+	float:left;
+}
+
+.onedrive-block-icon:after {
+	clear:both;
+	content: "";
+	display:block;
+}
