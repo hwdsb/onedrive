@@ -1080,7 +1080,7 @@ console.log( e );
 			}
 
 			// Verify nonce.
-			let verify = await verifyNonce( e.data.nonce );
+			let verify = await this.verifyNonce( e.data.nonce );
 			if ( ! verify ) {
 				return;
 			}
