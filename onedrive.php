@@ -98,6 +98,9 @@ function shortcode( $r ) {
 		// type
 		'type'   => 'other',
 
+		// sharepoint unique ID
+		'uniqueID' => '',
+
 		// dimensions
 		'width'  => '',
 		'height' => '',
@@ -276,6 +279,8 @@ function shortcode( $r ) {
 			break;
 	}
 
+	$is_sharepoint_unique_id = false;
+
 	// SharePoint.
 	if ( ! $is_personal ) {
 		// Only word, powerpoint, excel and visio can be embedded.
@@ -291,6 +296,26 @@ function shortcode( $r ) {
 			} else {
 				$r['link'] = str_replace( 'action=edit', 'action=embedview', $r['link'] );
 			}
+
+		// If have unique ID, use a different URL syntax for certain types.
+		} elseif ( true === in_array( $type, [ 'video', 'audio', 'image', 'pdf' ] ) && ! empty( $r['uniqueID'] ) ) {
+			$is_sharepoint_unique_id = true;
+
+			$original_link = $r['link'];
+
+			// Need to set to 'other' so iframe is used.
+			$type = 'other';
+
+			// Grab the OneDrive user from the link.
+			preg_match( '~/personal/(.*)/~', $r['link'], $user );
+
+			$r['link'] = sprintf(
+				'https://%1$s/personal/%2$s/_layouts/15/embed.aspx?UniqueId=%3$s&embed=%4$s&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
+				parse_url( $r['link'], PHP_URL_HOST ),
+				$user[1],
+				$r['uniqueID'],
+				urlencode( '{"ust":true,"hv":"CopyEmbedCode"}' )
+			);
 
 		// All other types will use icon display.
 		} else {
@@ -412,6 +437,15 @@ function shortcode( $r ) {
 		$extra = ' frameborder="0"';
 
 		$output = '<iframe id="onedrive-' . md5( $r['link'] ) . '" class="onedrive-shortcode" src="' .  esc_url( $r['link'] ) . '"' . $r['width'] . $r['height'] . $extra . '></iframe>';
+	}
+
+	/*
+	 * Embed sharing link if this is a SharePoint unique ID.
+	 *
+	 * This is necessary to set the authentication cookies to view the embed.
+	 */
+	if ( $is_sharepoint_unique_id ) {
+		$output = sprintf( '<iframe src="%1$s" width="0" height="0" style="display:none;"></iframe>%2$s', esc_url( $original_link ), $output );
 	}
 
 	// Wrap output in <figure> because of Gutenberg.

@@ -653,6 +653,9 @@
 			},
 			title: {
 				type: 'string'
+			},
+			uniqueID: {
+				type: 'string'
 			}
 		},
 		edit: function( props ) {
@@ -727,6 +730,10 @@
 
 				if ( fileDetails.hasOwnProperty( 'display' ) && files.value[0].hasOwnProperty( 'name' ) ) {
 					fileDetails.title = files.value[0].name;
+				}
+
+				if ( files.value[0].hasOwnProperty( 'eTag' ) ) {
+					fileDetails.uniqueID = files.value[0].eTag.match('{(?<id>.*)}').groups.id.toLowerCase();
 				}
 
 				return props.setAttributes( fileDetails );
@@ -900,7 +907,8 @@
 								size: undefined,
 								id: undefined,
 								display: undefined,
-								title: undefined
+								title: undefined,
+								uniqueID: undefined
 							});
 						},
 					}]
